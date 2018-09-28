@@ -1,7 +1,7 @@
 import { Directive, Input, OnInit, OnDestroy, DoCheck, Inject, HostBinding, forwardRef } from '@angular/core';
 
 import { combineLatest, Subscription, Subject, Observable } from 'rxjs';
-import { map, distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { NgxErrorsDirective } from './ngxerrors.directive';
 
@@ -44,9 +44,10 @@ export class NgxErrorDirective implements OnInit, OnDestroy, DoCheck {
     this._states = new Subject<string[]>();
     this.states = this._states.asObservable().pipe(distinctUntilChanged());
 
-    const errors = this.ngxErrors.subject
-      .filter(Boolean)
-      .filter(obj => !!~this.errorNames.indexOf(obj.errorName));
+    const errors = this.ngxErrors.subject.pipe(
+      filter(Boolean),
+      filter(obj => !!~this.errorNames.indexOf(obj.errorName))
+    )
 
     const states = this.states.pipe(
       map(states => this.rules.every(rule => !!~states.indexOf(rule)))

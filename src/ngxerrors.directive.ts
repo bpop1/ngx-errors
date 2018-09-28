@@ -1,11 +1,10 @@
 import { Directive, Input, OnChanges, OnDestroy, AfterViewInit } from '@angular/core';
 import { FormGroupDirective, AbstractControl } from '@angular/forms';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
 import { ErrorDetails, ErrorOptions } from './ngxerrors';
 
 import { toArray } from './utils/toArray';
+import { BehaviorSubject } from 'rxjs';
 
 @Directive({
   selector: '[ngxErrors]',
@@ -74,7 +73,7 @@ export class NgxErrorsDirective implements OnChanges, OnDestroy, AfterViewInit {
   ngOnChanges() {
     this.control = this.form.control.get(this.controlName);
   }
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.checkStatus();
